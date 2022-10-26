@@ -33,6 +33,7 @@ interface SigninCredentials {
 export class AuthService {
   rootUrl = 'https://api.angular-email.com'
   signedIn$ = new BehaviorSubject(null);
+  username = '';
 
   constructor(private http: HttpClient) {}
 
@@ -50,14 +51,20 @@ export class AuthService {
                     withCredentials: true
                   })
                 .pipe(
-                  tap(()=> this.signedIn$.next(true))
+                  tap(({username})=> {
+                    this.signedIn$.next(true)
+                    this.username = username;
+                  })
                 );
               }
               
   checkAuth() {
     return this.http.get<SignedInResponse>(`${this.rootUrl}/auth/signedin`, { withCredentials: true })
     .pipe(
-      tap(({authenticated}) => this.signedIn$.next(authenticated))
+      tap(({authenticated, username}) => {
+        this.signedIn$.next(authenticated)
+        this.username = username;
+      })
     )
   }
                 
@@ -69,9 +76,14 @@ export class AuthService {
   }
 
   signIn(credentials: SigninCredentials) {
-    return this.http.post(`${this.rootUrl}/auth/signin`, credentials)
+    return this.http.post<SignedInResponse>(`${this.rootUrl}/auth/signin`, credentials)
                 .pipe(
-                  tap(()=> this.signedIn$.next(true))
+                  tap(({username})=> {
+                    this.signedIn$.next(true)
+                    this.username = username;
+                  })
                 );          
   }
+
+  
 }

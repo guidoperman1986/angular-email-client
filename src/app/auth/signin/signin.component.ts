@@ -32,10 +32,10 @@ export class SigninComponent implements OnInit {
   onSubmit() {
     if (this.authForm.invalid) return;
 
-    this.authService.signIn(this.authForm.value).subscribe(()=>{
+    this.authService.signIn(this.authForm.value).subscribe({
       next: () => {
-        this.router.navigateByUrl('inbox')
-      }
+        this.router.navigateByUrl('/inbox')
+      },
       error: ({error}) => {
         if ( error.username || error.password ) {
           this.authForm.setErrors({ credentials: true })

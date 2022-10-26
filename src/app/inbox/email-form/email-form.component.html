@@ -1,0 +1,8 @@
+<form [formGroup]="emailForm" class="ui form" (onSubmit)="onSubmit()">
+    <app-input [control]="emailForm.get('to')"      inputType="email" label="To"></app-input>
+    <app-input [control]="emailForm.get('from')"    inputType="email" label="From"></app-input>
+    <app-input [control]="emailForm.get('subject')" inputType="text" label="Subject"></app-input>
+    <app-input [control]="emailForm.get('text')"    label="Content" controlType="textarea"></app-input>
+
+    <button type="submit" class="ui button primary" (click)="onSubmit()">Send</button>
+</form>
